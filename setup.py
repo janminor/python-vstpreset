@@ -7,7 +7,7 @@ setup(
     version="0.1.0",
     description="simple module for reading and writing VST3 presets ",
     author="Jan Minor",
-    author_email='39484083+janminor@users.noreply.github.com"',
+    author_email='39484083+janminor@users.noreply.github.com',
     url="https://github.com/janminor/python-vstpreset",
     packages=["vstpreset"],
     classifiers=[  
