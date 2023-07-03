@@ -181,7 +181,7 @@ def main(args=None):
             data = f.read(-1)
         preset = parse_vst3preset(data)
         print(preset)
-        if preset.vstpreset() != data:
+        if preset.preset_data() != data:
             print("data differs")
 
 
