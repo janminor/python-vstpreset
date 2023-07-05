@@ -21,9 +21,6 @@ def get_vst2presets(dir: str):
         _type_: list of paths
     """
     files = []
-    print(dir)
-    test = os.listdir(dir)
-    print(test)
     for (dirpath, dirnames, filenames) in os.walk(dir):
         files.extend(filenames)
         break
