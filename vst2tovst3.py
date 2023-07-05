@@ -40,25 +40,29 @@ def get_vst3_classid(vst3name: str, basedir: str):
         tuple: (classid, vendor)
     """
     dirs = []
-    for (dirpath, dirnames, filenames) in os.walk(basedir):
-        dirs = [os.path.join(dirpath, d) for d in dirnames if "Cubase" in d]
-        break
-    for nr in ("12","11","10"):
-        appdirs = [d for d in dirs if nr in d]
-        if appdirs:
-            break
-    try:
-        appdir = appdirs.pop(0)
-    except IndexError:
-        log.error("Cannot find Preferences Directory for Cubase in %s. Please specify one with --prefdir", basedir)
-        raise
     cachefile = ""
-    for (dirpath, dirnames, filenames) in os.walk(appdir):
-        for d in dirnames:
-            if "VST3 Cache" in d:
-                cachefile = os.path.join(dirpath, d, "vst3plugins.xml")
+    if "vst3plugins.xml" in basedir:
+        cachefile = basedir
+    else:
+        for (dirpath, dirnames, filenames) in os.walk(basedir):
+            dirs = [os.path.join(dirpath, d) for d in dirnames if "Cubase" in d]
+            break
+        for nr in ("12","11","10"):
+            appdirs = [d for d in dirs if nr in d]
+            if appdirs:
                 break
-        break
+        try:
+            appdir = appdirs.pop(0)
+        except IndexError:
+            log.error("Cannot find Preferences Directory for Cubase in %s. Please specify one with --prefdir", basedir)
+            raise
+        for (dirpath, dirnames, filenames) in os.walk(appdir):
+            for d in dirnames:
+                if "VST3 Cache" in d:
+                    cachefile = os.path.join(dirpath, d, "vst3plugins.xml")
+                    break
+            break
+
     if not os.path.isfile(cachefile):
         log.error("Cannot find vst3plugins.yaml in '%s/VST3 Cache'", appdir)
         raise FileNotFoundError(f"{appdir}/VST3 Cache/vst3plugins.xml")
@@ -120,18 +124,18 @@ def main(args=None):
     input_dir = args.directory or os.getcwd()
     infiles = get_vst2presets(input_dir.rstrip("\\").rstrip('"'))
 
-    (class_id, vendor) = get_vst3_classid(args.vst3name, args.vst3cache)
+    (class_id, vendor) = get_vst3_classid(args.vst3name, args.vst3cache.rstrip("\\"))
     if not class_id:
         if args.id:
             class_id = args.id
         else:
-            log.error("Cannot determine class ID for %s, please specify it via --id", args.vst3name)
+            log.error("Cannot determine class ID for '%s', please check the name given with --vst3name", args.vst3name)
             sys.exit(2)
     if not vendor:
         if args.vendor:
             class_id = args.vendor
         else:
-            log.error("Cannot determine vendor name for %s, please specify it via --vendor", args.vst3name)
+            log.error("Cannot determine vendor name for '%s', please check the name given with --vst3name", args.vst3name)
             sys.exit(2)
     
     output_dir = os.path.join(base_output_dir, vendor, args.vst3name )
