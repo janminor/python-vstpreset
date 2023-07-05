@@ -7,8 +7,8 @@ import os
 import xml.etree.ElementTree as ET
 import vstpreset
 import logging as log
-
-log.basicConfig(format='%(levelname)s: %(message)s', level=log.DEBUG)
+__version__="0.1.0"
+log.basicConfig(format='%(levelname)s: %(message)s', level=log.INFO)
 
 
 def get_vst2presets(dir: str):
@@ -119,6 +119,9 @@ def main(args=None):
                            help="vendor name of the target VST3 plugin, if it cannot be detected automatically")
     argparser.add_argument('-3', '--vst3name', type=str, required=True,
                            help="Name of the corresponding VST3 plugin")
+    argparser.add_argument('--version', action='version',
+                        version='%(prog)s {version}'.format(version=__version__))
+                        
     args = argparser.parse_args(args)
 
     input_dir = args.directory or os.getcwd()
