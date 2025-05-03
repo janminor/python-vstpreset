@@ -6,6 +6,10 @@ import vstpreset
 import argparse
 import re
 from pathlib import Path
+import tempfile
+import platform
+
+TMP = tempfile.gettempdir() if platform.system() == "Windows" else "/tmp"
 
 
 def log_fxp_info(fxp_preset):
@@ -85,13 +89,16 @@ def convert(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("preset_path", help="Path to the .fxp or .vstpreset file")
+    parser.add_argument("preset_path", help="Path to the .fxp file or directory")
     parser.add_argument(
-        "--out", help="Optional path for output .vstpreset", default="/tmp"
+        "--out",
+        help=f"Optional path for output .vstpreset (Default: {TMP})",
+        default=TMP,
     )
     parser.add_argument(
         "--vst3-preset",
-        help="Path to a sample .vstpreset file to use for defaults (e.g. class_id, version)",
+        help="Path to a sample .vstpreset file to use for defaults (e.g. class_id, version, etc.)."
+        + "\nOne manual export from a DAW like REAPER or Ableton should suffice.",
         default=None,
     )
     parser.add_argument(
@@ -140,14 +147,37 @@ if __name__ == "__main__":
 
     assert class_id is not None, "class_id is required"
 
+    input_path = Path(args.preset_path)
     output_path = Path(args.out)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    convert(
-        args.preset_path,
-        output_path,
-        class_id=class_id,
-        chunklist_id=chunklist_id,
-        header_id=header_id,
-        version=version,
-    )
+    if input_path.is_dir():
+        # Process all .fxp files in the directory and its subdirectories
+        for fxp_file in input_path.glob("**/*.fxp"):
+            # Get the relative path from the input directory
+            rel_path = fxp_file.relative_to(input_path)
+            # Create the corresponding output directory
+            out_dir = output_path / rel_path.parent
+            out_dir.mkdir(parents=True, exist_ok=True)
+            # Convert the .fxp file
+            try:
+                convert(
+                    str(fxp_file),
+                    str(out_dir),
+                    class_id=class_id,
+                    chunklist_id=chunklist_id,
+                    header_id=header_id,
+                    version=version,
+                )
+            except Exception as e:
+                print(f"Error converting {fxp_file}: {e}")
+    else:
+        # Process a single file
+        convert(
+            args.preset_path,
+            output_path,
+            class_id=class_id,
+            chunklist_id=chunklist_id,
+            header_id=header_id,
+            version=version,
+        )
