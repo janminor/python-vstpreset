@@ -1,12 +1,30 @@
 # vstpreset
 
-A simple python module for reading and writing VST3 preset files. Not sure whether it is actually useful... :)
+A simple python module for reading and writing VST3 preset files.
+Ability to convert older VST preset formats, including VST2, and
+many plugins' more native `.fxp` preset formats.
 
-No documentation, no tests yet. This is beta, use at your own risk.
+Some documentation, no tests yet. This is beta, use at your own risk. But it's already saved lives 🤝.
+
+## fxptovst3
+
+Recurses a directory (or single `.fxp` file) and exports VST3 preset
+files (`.vstpreset`) to an output directory tree (default `/tmp`).
+
+See `python fxptovst3 --help`.
+
+These older `.fxp` style binaries are less compatible, less automatable than
+the slightly more modern VST3 `.vstpreset` file format that play
+better with modern DAW built-ins (verses solely custom plugin GUI browsers, etc.).
+
+As an example, here's a zipped archive of all ~3.3k presets provided
+by the great, free OSS [Surge XT synth](https://surge-synthesizer.github.io/),
+in VST3 `.vstpreset` file format: [surge-xt-vstpresets.7z](https://johnnymarnell.github.io/vst3-presets) on Google Drive.
 
 ## vst2tovst3
 
-This is a simple script that will convert .vstpreset-Files create by the VST2 version of a plugin to 
+This is a simple script (tied heavily to Cubase DAW),
+that will convert .vstpreset-Files create by the VST2 version of a plugin to 
 a .vstpreset for the VST3 version. Some plugin vendors use a different plugin ID for the VST2 and VST3
 versions of the same plugin, and for Cubase those are different plugins. 
 

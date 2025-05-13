@@ -7,10 +7,10 @@ setup(
     version="0.1.0",
     description="simple module for reading and writing VST3 presets ",
     author="Jan Minor",
-    author_email='39484083+janminor@users.noreply.github.com',
+    author_email="39484083+janminor@users.noreply.github.com",
     url="https://github.com/janminor/python-vstpreset",
     packages=["vstpreset"],
-    classifiers=[  
+    classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
@@ -21,4 +21,8 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     python_requires=">=3.7, <4",
+    install_requires=[
+        "fxp>=0.1.0",
+        "construct>=2.10.69",
+    ],
 )
