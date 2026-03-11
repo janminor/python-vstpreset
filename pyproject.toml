@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vstpreset"
+version = "0.2.0"
+description = "simple module for reading and writing VST3 presets "
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [ {name = "Jan Minor", email = "39484083+janminor@users.noreply.github.com"} ]
+urls = { "Homepage" = "https://github.com/janminor/python-vstpreset" }
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = ["fxp>=0.1.0", "construct>=2.10.69" ]
+
+[tool.setuptools.packages.find]
+include = ["vstpreset"]
