@@ -3,14 +3,13 @@
 #
 #
 #
-""" 
+"""
 Python Module for reading and writing VST3 presets
 
 """
 
 import sys
-from struct import calcsize, unpack_from, pack
-
+from struct import calcsize, pack, unpack_from
 
 #     VST 3 Preset File Format Definition
 # ===================================
@@ -53,7 +52,7 @@ class VST3Preset:
         class_id: str,
         header_id: str = "VST3",
         version: int = 1,
-        chunks: dict = None,
+        chunks: dict | None = None,
         chunklist_id: str = "List",
     ):
         self.header_id = header_id

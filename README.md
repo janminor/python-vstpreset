@@ -28,7 +28,15 @@ Type the following, using as an examples u-he's Zebra2
 cd '.\Documents\VST3 Presets\'
 .\vst2tovst3.exe -d '.\u-he\Zebra2(x64)' --vst3name Zebra2
 ```
+Be careful not to have a "\" at the end of the folder path! Windows completion does that with folders and it breaks the command line parser...
+
 The "--vst3name" Parameter requires the exact name of the VST3 plugin version. If you do not know that, check in Cubase's Plugin Manager. 
+
+If for some reason the program cannot automatically detect the VST3 Cache file, you can specify one like this:
+```
+.\vst2tovst3.exe --vst3cache 'c:\User\YOURUSERNAME\AppData\Roaming\Steinberg\Cubase 15\Cubase Pro VST3 Cache\vst3plugins.xml' -d '.\u-he\Zebra2(x64)' --vst3name Zebra2
+```
+
 
 The result should be that all .vstpreset-Files in the '.\u-he\Zebra2(x64)' Folder are now in the '.\u-he\Zebra3'-Folder, but with a "v2"-Prefix, as not to overwrite any existing presets.
 
@@ -43,3 +51,8 @@ preset = vstpreset.parse_vst3preset_file("filename.vstpreset")
 preset.write_file("new.vstpreset")
 # should write a bit-identical new preset file. If not, it is totally my fault
 ```
+
+## compile a standalone .exe for Windows
+```
+pip install pyinstaller
+pyinstaller --onefile --name vst2tovst3 --console --add-data "vstpreset;vstpreset" vst2tovst3.py
